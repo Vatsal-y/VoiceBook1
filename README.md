@@ -91,7 +91,7 @@ Manual appointment scheduling wastes time, leads to errors, and doesn’t scale.
 
 ## 📹 Demo
 
-[🎥 Watch the demo](https://drive.google.com/file/d/1KvzQqotBw8n2D6ECOp0LCzA3_4rCp--9/view?usp=share_link)  
+[🎥 Watch the demo](https://vimeo.com/1087588394?share=copy)  
 (Voice interaction → Slot booking → Calendar entry → Confirmation SMS)
 
 ---
