@@ -1,4 +1,4 @@
-# 🤖 VoiceBox — Smart, Scalable, Seamless
+# 🤖 VoiceBook — Smart, Scalable, Seamless
 
 > Automate your entire appointment booking workflow — just by talking.
 
