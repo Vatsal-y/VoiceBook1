@@ -1,0 +1,1774 @@
+{
+  "name": "VoiceBook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b3d19683-0f3f-4a61-bb08-3a058fb5b0ab",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        760
+      ],
+      "id": "4cd4ebdc-1648-47e9-a24a-00d48a7b5208",
+      "name": "Tool-Calendar-Webhook",
+      "webhookId": "b3d19683-0f3f-4a61-bb08-3a058fb5b0ab"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Event = tool-call').item.json.body.message.toolWithToolCallList[0].toolCall.id }}\",\n            \"result\": \"We've got available slots at {{ $json.availSlots }}, do any of those work?\"\n        }\n    ]\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1720,
+        340
+      ],
+      "id": "1e90fd52-0e4c-4c21-8fa1-56c8f9cd4bf4",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Event = tool-call').item.json.body.message.toolWithToolCallList[0].toolCall.id }}\",\n            \"result\": \"Hmm, that day is booked, we've got available slots at {{ $json.availSlots }}, for the following day. Do any of those work?\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1720,
+        520
+      ],
+      "id": "fc5e548f-a2c3-411a-aa3c-e6f0830d84b7",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Event = tool-call').item.json.body.message.toolWithToolCallList[0].toolCall.id }}\",\n            \"result\": \"Hmm, that day is booked, we've got available slots at {{ $json.availSlots }}, 2 days from then. Do any of those work?\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1720,
+        700
+      ],
+      "id": "f80deaf8-6489-455d-a793-cc4e59c14c19",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('tool-call-name').item.json.body.message.toolCalls[0].id }}\",\n            \"result\": \"I've created your booking, you should receive an SMS confirmation with the meeting link shortly?\"\n        }\n    ]\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        1140
+      ],
+      "id": "13dbda4d-022b-4137-a8a4-3745764067b4",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7d7501f6-b357-4524-9c8d-75b29e1a820b",
+              "name": "startTime",
+              "value": "={{ DateTime.fromISO($json.body.message.toolCalls[0].function.arguments.requestedTime).toFormat(\"yyyy-MM-dd\") + \"T09:00:00+05:30\" }}",
+              "type": "string"
+            },
+            {
+              "id": "c33c40ee-7dac-4159-9def-3eb977cf51d8",
+              "name": "attempt",
+              "value": "=0",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        520
+      ],
+      "id": "5532f5ed-6607-402e-96ce-8e6c329743f9",
+      "name": "Start Time + Attempt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7d7501f6-b357-4524-9c8d-75b29e1a820b",
+              "name": "startTime",
+              "value": "={{ $json.startTime }}",
+              "type": "string"
+            },
+            {
+              "id": "c33c40ee-7dac-4159-9def-3eb977cf51d8",
+              "name": "attempt",
+              "value": "={{ $json.attempt }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        720
+      ],
+      "id": "410de84c-34cd-4012-9555-9457736f4c21",
+      "name": "Start Time + Attempt 1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7d7501f6-b357-4524-9c8d-75b29e1a820b",
+              "name": "startTime",
+              "value": "={{ $json.startTime }}",
+              "type": "string"
+            },
+            {
+              "id": "c33c40ee-7dac-4159-9def-3eb977cf51d8",
+              "name": "attempt",
+              "value": "={{ $json.attempt }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        920
+      ],
+      "id": "065a67a9-0985-4a66-8b83-7aa0d24012e5",
+      "name": "Start Time + Attempt 2"
+    },
+    {
+      "parameters": {
+        "url": "https://api.cal.com/v1/slots",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "calApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "eventTypeId",
+              "value": "2533678"
+            },
+            {
+              "name": "startTime",
+              "value": "={{ $json.startTime }}"
+            },
+            {
+              "name": "endTime",
+              "value": "={{ DateTime.fromISO($json.startTime).plus({ hours: 8 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss+05:30\") }}"
+            },
+            {
+              "name": "timeZone",
+              "value": "Asia/Kolkata"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        520
+      ],
+      "id": "9d7e78c7-6869-4f8c-8914-dbf5c744709f",
+      "name": "AvailSlots",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "calApi": {
+          "id": "MISnusK8h0ErzTtb",
+          "name": "Cal account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.cal.com/v1/slots",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "calApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "eventTypeId",
+              "value": "2533678"
+            },
+            {
+              "name": "startTime",
+              "value": "={{ $json.startTime }}"
+            },
+            {
+              "name": "endTime",
+              "value": "={{ DateTime.fromISO($json.startTime).plus({ hours: 8 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss+05:30\") }}"
+            },
+            {
+              "name": "timeZone",
+              "value": "Asia/Kolkata"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        720
+      ],
+      "id": "6f148362-07af-4e0d-9f84-bab61831a424",
+      "name": "AvailSlots1",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "calApi": {
+          "id": "MISnusK8h0ErzTtb",
+          "name": "Cal account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.cal.com/v1/slots",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "calApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "eventTypeId",
+              "value": "2533678"
+            },
+            {
+              "name": "startTime",
+              "value": "={{ $json.startTime }}"
+            },
+            {
+              "name": "endTime",
+              "value": "={{ DateTime.fromISO($json.startTime).plus({ hours: 8 }).toFormat(\"yyyy-MM-dd'T'HH:mm:ss+05:30\") }}"
+            },
+            {
+              "name": "timeZone",
+              "value": "Asia/Kolkata"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        920
+      ],
+      "id": "7b28e1fb-a3b8-4ea4-b4bf-2014d1c4084d",
+      "name": "AvailSlots2",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "calApi": {
+          "id": "MISnusK8h0ErzTtb",
+          "name": "Cal account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) {\n    return [];\n}\n\nconst data = items[0].json;\n\n// Ensure \"attempt\" is set; default to 0 if missing\nconst attempt = data.attempt !== undefined ? data.attempt : 0;\n\n// The \"slots\" object might have multiple date keys. We only pick the first one.\nconst dateKeys = Object.keys(data.slots || {});\nif (dateKeys.length === 0) {\n  // No date keys => no slots at all, so return with empty availability\n  return [{\n    json: {\n      day: null,\n      availSlots: [],\n      startTime: data.startTime,\n      attempt: attempt\n    }\n  }];\n}\n\nconst dateKey = dateKeys[0]; // First available date\nconst timeSlots = data.slots[dateKey] || [];\n\n// Shuffle function\nconst shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);\nconst shuffled = shuffleArray([...timeSlots]);\n\n// Slice first 3 slots\nconst sliced = shuffled.slice(0, 3);\n\n// Sort by time (assuming each slot has a \"time\" property)\nsliced.sort((a, b) => new Date(a.time) - new Date(b.time));\n\n// Return the processed data along with day, startTime, and attempt\nreturn [{\n  json: {\n    day: dateKey,\n    availSlots: sliced,\n    startTime: data.startTime,\n    attempt: attempt\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        520
+      ],
+      "id": "9a2e5e55-6ba9-4fd2-92d2-0c34e3aa8412",
+      "name": "Slice + Shuffle"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) {\n    return [];\n}\n\nconst data = items[0].json;\n\n// Ensure \"attempt\" is set; default to 1 if missing\nconst attempt = data.attempt !== undefined ? data.attempt : 1;\n\n// The \"slots\" object might have multiple date keys. We only pick the first one.\nconst dateKeys = Object.keys(data.slots || {});\nif (dateKeys.length === 0) {\n  // No date keys => no slots at all, so return with empty availability\n  return [{\n    json: {\n      day: null,\n      availSlots: [],\n      startTime: data.startTime,\n      attempt: attempt\n    }\n  }];\n}\n\nconst dateKey = dateKeys[0]; // First available date\nconst timeSlots = data.slots[dateKey] || [];\n\n// Shuffle function\nconst shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);\nconst shuffled = shuffleArray([...timeSlots]);\n\n// Slice first 3 slots\nconst sliced = shuffled.slice(0, 3);\n\n// Sort by time (assuming each slot has a \"time\" property)\nsliced.sort((a, b) => new Date(a.time) - new Date(b.time));\n\n// Return the processed data along with day, startTime, and attempt\nreturn [{\n  json: {\n    day: dateKey,\n    availSlots: sliced,\n    startTime: data.startTime,\n    attempt: attempt\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        720
+      ],
+      "id": "c7ec1e89-a88a-4520-97c1-e8e24214deb6",
+      "name": "Slice + Shuffle1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) {\n    return [];\n}\n\nconst data = items[0].json;\n\n// Ensure \"attempt\" is set; default to 1 if missing\nconst attempt = data.attempt !== undefined ? data.attempt : 2;\n\n// The \"slots\" object might have multiple date keys. We only pick the first one.\nconst dateKeys = Object.keys(data.slots || {});\nif (dateKeys.length === 0) {\n  // No date keys => no slots at all, so return with empty availability\n  return [{\n    json: {\n      day: null,\n      availSlots: [],\n      startTime: data.startTime,\n      attempt: attempt\n    }\n  }];\n}\n\nconst dateKey = dateKeys[0]; // First available date\nconst timeSlots = data.slots[dateKey] || [];\n\n// Shuffle function\nconst shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);\nconst shuffled = shuffleArray([...timeSlots]);\n\n// Slice first 3 slots\nconst sliced = shuffled.slice(0, 3);\n\n// Sort by time (assuming each slot has a \"time\" property)\nsliced.sort((a, b) => new Date(a.time) - new Date(b.time));\n\n// Return the processed data along with day, startTime, and attempt\nreturn [{\n  json: {\n    day: dateKey,\n    availSlots: sliced,\n    startTime: data.startTime,\n    attempt: attempt\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        920
+      ],
+      "id": "d421aec0-d196-45a4-a8ea-3ba6390ccefe",
+      "name": "Slice + Shuffle2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst availSlots = data.availSlots || [];\nconst attempt = data.attempt !== undefined ? Number(data.attempt) : 0;\nconst startTime = data.startTime;\n\n// If availSlots isn’t an array or is empty, return \"busy\"\nif (!Array.isArray(availSlots) || availSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nfunction formatTime(dateInput) {\n  const d = new Date(dateInput);\n  const options = { \n    hour: 'numeric', \n    minute: 'numeric', \n    hour12: true, \n    timeZone: 'Asia/Kolkata'\n  };\n  return d.toLocaleTimeString('en-AU', options);\n}\n\n// Filter out any slots without a valid \"time\" property\nconst validSlots = availSlots.filter(slot => slot.time);\nif (validSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\n// Format each valid slot's time and join them with commas\nconst formatted = validSlots\n  .map(slot => formatTime(slot.time))\n  .join(', ');\n\n// If the formatted string is empty, return \"busy\"\nif (!formatted) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    availSlots: formatted,  // e.g. \"10:00 am, 10:15 am, 12:30 pm\"\n    attempt,\n    startTime\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        520
+      ],
+      "id": "b817eaa0-0272-4a79-a8b3-42bb2f1f6467",
+      "name": "Format + Filter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst availSlots = data.availSlots || [];\nconst attempt = data.attempt !== undefined ? Number(data.attempt) : 1;\nconst startTime = data.startTime;\n\n// If availSlots isn’t an array or is empty, return \"busy\"\nif (!Array.isArray(availSlots) || availSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nfunction formatTime(dateInput) {\n  const d = new Date(dateInput);\n  const options = { \n    hour: 'numeric', \n    minute: 'numeric', \n    hour12: true, \n    timeZone: 'Asia/Kolkata'\n  };\n  return d.toLocaleTimeString('en-AU', options);\n}\n\n// Filter out any slots without a valid \"time\" property\nconst validSlots = availSlots.filter(slot => slot.time);\nif (validSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\n// Format each valid slot's time and join them with commas\nconst formatted = validSlots\n  .map(slot => formatTime(slot.time))\n  .join(', ');\n\n// If the formatted string is empty, return \"busy\"\nif (!formatted) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    availSlots: formatted,  // e.g. \"10:00 am, 10:15 am, 12:30 pm\"\n    attempt,\n    startTime\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        720
+      ],
+      "id": "b706b355-2825-4bb7-a3a6-77a9bd53af2f",
+      "name": "Format + Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst availSlots = data.availSlots || [];\nconst attempt = data.attempt !== undefined ? Number(data.attempt) : 2;\nconst startTime = data.startTime;\n\n// If availSlots isn’t an array or is empty, return \"busy\"\nif (!Array.isArray(availSlots) || availSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nfunction formatTime(dateInput) {\n  const d = new Date(dateInput);\n  const options = { \n    hour: 'numeric', \n    minute: 'numeric', \n    hour12: true, \n    timeZone: 'Asia/Kolkata'\n  };\n  return d.toLocaleTimeString('en-AU', options);\n}\n\n// Filter out any slots without a valid \"time\" property\nconst validSlots = availSlots.filter(slot => slot.time);\nif (validSlots.length === 0) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\n// Format each valid slot's time and join them with commas\nconst formatted = validSlots\n  .map(slot => formatTime(slot.time))\n  .join(', ');\n\n// If the formatted string is empty, return \"busy\"\nif (!formatted) {\n  return [{\n    json: {\n      availSlots: \"busy\",\n      attempt,\n      startTime\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    availSlots: formatted,  // e.g. \"10:00 am, 10:15 am, 12:30 pm\"\n    attempt,\n    startTime\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        920
+      ],
+      "id": "cfc7a5b9-0b03-4ec5-89ba-b008b4685883",
+      "name": "Format + Filter2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "df7e5dbc-826e-4763-9a85-87c8136155de",
+              "leftValue": "={{ $json.availSlots }}",
+              "rightValue": "busy",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        520
+      ],
+      "id": "56a5c4c4-d5a9-47b6-90e2-245a85bb368e",
+      "name": "If Time Busy"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "df7e5dbc-826e-4763-9a85-87c8136155de",
+              "leftValue": "={{ $json.availSlots }}",
+              "rightValue": "busy",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        720
+      ],
+      "id": "a0a21e3f-6e79-4bcd-a0c2-e82ad11b0353",
+      "name": "If Time Busy1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "df7e5dbc-826e-4763-9a85-87c8136155de",
+              "leftValue": "={{ $json.availSlots }}",
+              "rightValue": "busy",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        920
+      ],
+      "id": "92ddfdb6-3cfb-4916-97e5-d45f4d1deeca",
+      "name": "If Time Busy2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1b2209d1-322e-44be-acd2-dfc0fb278e9d",
+              "name": "attempt",
+              "value": "={{ Number($('Format + Filter').item.json.attempt) + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "ba93469a-3aa6-4f22-ad70-8be06d8c4719",
+              "name": "startTime",
+              "value": "={{ DateTime.fromISO($(\"Start Time + Attempt\").item.json.startTime, { setZone: true }).plus({ days: 1 }).toFormat(\"yyyy-MM-dd\")+\"T09:00:00+05:30\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        380
+      ],
+      "id": "265ed06d-aaf4-44b5-82f6-295137b216ef",
+      "name": "+1 Day / Attempt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1b2209d1-322e-44be-acd2-dfc0fb278e9d",
+              "name": "attempt",
+              "value": "={{ Number($('Format + Filter1').item.json.attempt) + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "ba93469a-3aa6-4f22-ad70-8be06d8c4719",
+              "name": "startTime",
+              "value": "={{ DateTime.fromISO($(\"Start Time + Attempt 1\").item.json.startTime, { setZone: true }).plus({ days: 1 }).toFormat(\"yyyy-MM-dd\")+\"T09:00:00+05:30\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        680
+      ],
+      "id": "d430ef1a-56eb-4046-a245-1b098335c5cf",
+      "name": "+1 Day / Attempt1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1b2209d1-322e-44be-acd2-dfc0fb278e9d",
+              "name": "attempt",
+              "value": "={{ Number($('Format + Filter2').item.json.attempt) + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "ba93469a-3aa6-4f22-ad70-8be06d8c4719",
+              "name": "startTime",
+              "value": "={{ DateTime.fromISO($(\"Start Time + Attempt 2\").item.json.startTime, { setZone: true }).plus({ days: 1 }).toFormat(\"yyyy-MM-dd\")+\"T09:00:00+05:30\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        960
+      ],
+      "id": "ddf687ec-a9d1-4ea5-a30c-053685b1d87e",
+      "name": "+1 Day / Attempt2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01279cc4-23ea-4722-bc73-57428d89de78",
+              "leftValue": "={{ $('Format + Filter').item.json.attempt }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1300,
+        380
+      ],
+      "id": "2d8de0dd-eb29-4a55-aa9f-8949a1551a70",
+      "name": "Attempt Check"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01279cc4-23ea-4722-bc73-57428d89de78",
+              "leftValue": "={{ $('Format + Filter').item.json.attempt }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1300,
+        680
+      ],
+      "id": "9a0bde21-8165-4362-8381-6e4e77c045d4",
+      "name": "Attempt Check1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01279cc4-23ea-4722-bc73-57428d89de78",
+              "leftValue": "={{ $('Format + Filter').item.json.attempt }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1300,
+        960
+      ],
+      "id": "bd67a787-a139-420f-965f-ce7fa4926b6d",
+      "name": "Attempt Check2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cece0c40-322b-4bec-91d4-f00a2fe85da6",
+              "name": "requestedTime",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.requestedTime }}",
+              "type": "string"
+            },
+            {
+              "id": "434329fd-ca96-4e2d-9362-0114ba4f9132",
+              "name": "name",
+              "value": "={{ $json.body.message.toolWithToolCallList[0].toolCall.function.arguments.name }}",
+              "type": "string"
+            },
+            {
+              "id": "6cc111d9-b853-457c-b89a-77cba13dfa2d",
+              "name": "reason",
+              "value": "={{ $json.body.message.toolWithToolCallList[0].toolCall.function.arguments.reason }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        1140
+      ],
+      "id": "5c6e6b37-936c-4e29-95cd-e1af4226eac2",
+      "name": "Arguments"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cal.com/vatsal-y/remontada",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "calApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"eventTypeId\": 2533678,\n  \"start\": \"{{ $json.requestedTime }}+05:30\",\n  \"responses\": {\n    \"name\": \"{{ $json.name }}\",     \n    \"email\": \"v0546561@gmail.com\",\n    \"Phone\":  \"+12296290256\", \n    \"title\": \"Booking with {{ $json.name }}, and Talk AI\",\n     \"location\": {\n      \"value\": \"integrations:google:meet\",\n      \"optionValue\": \"\"\n\n    }\n  },\n  \"metadata\": {},\n  \"timeZone\": \"Asia/Kolkata\",  \n  \"language\": \"en\",\n  \"description\": \"Discovery - {{ $json.reason }}\",\n  \"status\": \"ACCEPTED\",\n  \"smsReminderNumber\": null\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        1140
+      ],
+      "id": "d6ec16cd-fb86-4108-b096-b827d7c8967e",
+      "name": "BookSlot",
+      "credentials": {
+        "calApi": {
+          "id": "MISnusK8h0ErzTtb",
+          "name": "Cal account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "36dc2d36-a7e7-487b-8698-233e0bc9e05a",
+              "leftValue": "={{ $json.body.message.type }}",
+              "rightValue": "tool-calls",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -380,
+        760
+      ],
+      "id": "14fe06b5-98d9-41cc-98f6-c2e65c6b0e00",
+      "name": "Event = tool-call"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7fced170-16e0-4a5d-b3e2-1ac61c101be1",
+              "leftValue": "={{ $json.body.message.toolWithToolCallList[0].function.name }}",
+              "rightValue": "checkCalendarN8N",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -140,
+        760
+      ],
+      "id": "16189b55-097b-4d3c-9ffe-378a99b2e69f",
+      "name": "tool-call-name"
+    },
+    {
+      "parameters": {
+        "from": "+12296290256",
+        "to": "={{ $('tool-call-name').item.json.body.message.call.customer.number }}",
+        "message": "=Hii there,\n\nYour booking has been created for {{ $('tool-call-name').item.json.body.message.toolCalls[0].function.arguments.requestedTime }}.\n\nYou can join the meeting from this link:\n{{ $json.references[0].meetingUrl }}\n\nThank you for your time on the phone. Look forward to meeting. \n\nRegards, \nVatsal\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        1440
+      ],
+      "id": "3aa13522-f3bf-48d6-83f6-64501cf4d6fc",
+      "name": "Twilio",
+      "credentials": {
+        "twilioApi": {
+          "id": "xTEzzlUjKO3axUux",
+          "name": "Twilio account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Event = tool-call').item.json.body.message.toolWithToolCallList[0].toolCall.id }}\",\n            \"result\": \"Looks like we are fully booked, did you want to call back in a few days?\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1720,
+        920
+      ],
+      "id": "59a86743-28aa-40c1-8f95-5763635cf0c0",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appurtpI5RBQlHfal",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblGAq5iLGGrnbN93",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Meeting Time": "={{ $('tool-call-name').item.json.body.message.toolCalls[0].function.arguments.requestedTime }}",
+            "Status": "Booked",
+            "Meeting Link": "={{ $('Respond to Webhook3').item.json.references[0].meetingUrl }}",
+            "Name": "={{ $('Respond to Webhook3').item.json.responses.name }}",
+            "Number": "={{ $('tool-call-name').item.json.body.message.call.customer.number }}",
+            "Reason": "={{ $('Respond to Webhook3').item.json.responses.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Number",
+              "displayName": "Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Meeting Time",
+              "displayName": "Meeting Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Meeting Link",
+              "displayName": "Meeting Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Booked",
+                  "value": "Booked"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        1140
+      ],
+      "id": "d28a833f-d5ee-47a8-9c00-e259f0c564d9",
+      "name": "Booking Record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "JL9eoXsW0tqXlJFF",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appurtpI5RBQlHfal",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbldWV7joFdRlUT5M",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "started": "={{ $('Event = tool-call').item.json.body.message.startedAt }}",
+            "ended": "={{ $('Event = tool-call').item.json.body.message.endedAt }}",
+            "ended reason": "={{ $('Event = tool-call').item.json.body.message.endedReason }}",
+            "cost(stt)": "={{ $('Event = tool-call').item.json.body.message.costBreakdown.stt }}",
+            "cost(llm)": "={{ $('Event = tool-call').item.json.body.message.costBreakdown.llm }}",
+            "cost(tts)": "={{ $('Event = tool-call').item.json.body.message.costBreakdown.tts }}",
+            "cost(vapi)": "={{ $('Event = tool-call').item.json.body.message.costBreakdown.vapi }}",
+            "cost(total)": "={{ $('Event = tool-call').item.json.body.message.costBreakdown.total }}",
+            "id": "={{ $('Event = tool-call').item.json.body.message.call.id }}",
+            "customernumber": "={{ $json.number }}",
+            "transcript": "={{ $('Event = tool-call').item.json.body.message.transcript }}",
+            "recording": "={{ $('Event = tool-call').item.json.body.message.recordingUrl }}",
+            "type": "={{ $('Event = tool-call').item.json.body.message.call.type }}",
+            "milliseconds": "={{ $('Event = tool-call').item.json.body.message.durationMs }}",
+            "cost(twilio)": 0,
+            "cost": 0,
+            "callproviderID": "={{ $('Event = tool-call').item.json.body.message.call.assistant.model.provider }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "callproviderID",
+              "displayName": "callproviderID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "phonenumberID",
+              "displayName": "phonenumberID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "customernumber",
+              "displayName": "customernumber",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "started",
+              "displayName": "started",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ended",
+              "displayName": "ended",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "milliseconds",
+              "displayName": "milliseconds",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost",
+              "displayName": "cost",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(stt)",
+              "displayName": "cost(stt)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(llm)",
+              "displayName": "cost(llm)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(tts)",
+              "displayName": "cost(tts)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(vapi)",
+              "displayName": "cost(vapi)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(total)",
+              "displayName": "cost(total)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cost(twilio)",
+              "displayName": "cost(twilio)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ended reason",
+              "displayName": "ended reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript",
+              "displayName": "transcript",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "recording",
+              "displayName": "recording",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        1340
+      ],
+      "id": "099b21d5-9fb0-4c09-b731-f46f00fa7d96",
+      "name": "Raw Data Record ",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "JL9eoXsW0tqXlJFF",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d86411b9-9043-42ff-938a-d35198eee0d4",
+              "name": "number",
+              "value": "={{ $json.body.message.call.customer.number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        1340
+      ],
+      "id": "f4ae5822-a8e0-4c37-af5f-9e9ef02abbc4",
+      "name": "Customer Number"
+    },
+    {
+      "parameters": {
+        "content": "## Webhook Event-type Handler \nIf server-event = tool-call -> check tool-call name\n- name = checkCalendarN8N -> true\n- name = bookCalendarN8N -> false\n\nIf server-event ≠ tool-call -> false\n- end-of-call-report sent from VAPI only\n",
+        "height": 220,
+        "width": 380,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -420,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "8b277607-6ed9-4d60-bec0-003880d977e8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Availability Handler\n\nScreening Availability\nThe workflow initializes the attempt counter and start time (formatted as \"yyyy-MM-ddT09:00:00+11:00\" for AEST).\nThe AvailSlots nodes request available slots from Cal.com within an 8-hour window using:\nEvent type ID\nTime zone: Australia/Sydney\nThe response is processed:\nA random subset (3 slots) is selected.\nIf slots are available, they are formatted for user selection.\nIf unavailable, the workflow marks it as \"busy\" and triggers a retry.\nHandling Busy Availability\nIf no slots are found, the If Time Busy condition advances the start time by one day and retries the check.\nIf no slots are found after multiple attempts, the workflow moves to rolling the attempt counter.\nRolling the Attempt Counter\nEach failed attempt increments the attempt counter and shifts the start time forward by a day.\nThe Attempt Check node prevents infinite loops, stopping retries after 3 attempts.\nIf the limit is not reached, the process loops back to recheck availability.\nThis ensures efficient slot selection, automatic retries, and controlled attempt limits",
+        "height": 420,
+        "width": 980,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "826d7b9d-7a61-49d4-bf8f-267a3d53e5c9",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## If request time = free; \n- \"We've got available slots at {{ $json.availSlots }}, do any of those work?\"",
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        300
+      ],
+      "typeVersion": 1,
+      "id": "700e5e5d-1a8b-48cc-9ae3-4ecd7a10a1f2",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## If user request time + 1 day = free; \n- \"Hmm, that day is booked, we've got available slots at {{ $json.availSlots }}, for the following day. Do any of those work?\"",
+        "width": 340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        500
+      ],
+      "typeVersion": 1,
+      "id": "acfe871b-f10c-484d-a972-f6557e76584f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## If user request time + 2 day = free; \n- \"Hmm, that day is booked, we've got available slots at {{ $json.availSlots }}, 2 days from then. Do any of those work?\"",
+        "width": 340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        700
+      ],
+      "typeVersion": 1,
+      "id": "e6639845-1cb0-4792-946a-759a68cb53d7",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## If user request time = busy; \n- \"Looks like we are fully booked, did you want to call back in a few days?\"",
+        "width": 340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        900
+      ],
+      "typeVersion": 1,
+      "id": "834ef606-76e5-41ae-b3ae-9912bb068d7a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Creating a Booking\n1. Extracting Booking Information\nThe Arguments node gathers:\nrequestedTime: Selected time slot.\nname: User’s name.\nreason: Purpose of the booking.\n2. Sending the Booking Request\nThe BookSlot node sends a POST request to https://api.cal.com/v1/bookings with:\n\n{\n  \"eventTypeId\": 1229827,\n  \"start\": \"{{ requestedTime }}+11:00\",\n  \"responses\": {\n    \"name\": \"{{ name }}\",\n    \"email\": \"******\", \n    \"Phone\": \"******\",\n    \"title\": \"Booking with {{ name }}, and Talk AI\",\n    \"location\": { \"value\": \"integrations:google:meet\", \"optionValue\": \"\" }\n  },\n  \"metadata\": {},\n  \"timeZone\": \"******\",\n  \"language\": \"en\",\n  \"description\": \"Discovery - {{ reason }}\",\n  \"status\": \"ACCEPTED\"\n}\n\n\n3. Confirming the Booking\nIf successful, an SMS confirmation is sent via Twilio.\n4. Logging the Booking\nThe Booking Record node stores:\nMeeting time\nStatus (\"Booked\")\nMeeting link\nName & Phone number\n5. Internal Team Notification\nThe Notify Team node sends a Slack message with:\nContact number\nBooking time\nMeeting link",
+        "height": 820,
+        "width": 580,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1320,
+        1180
+      ],
+      "typeVersion": 1,
+      "id": "97080815-a4cb-457b-b716-a20212c0a150",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Raw Data Store\n\nStoring;\n- call id's\n- durations\n- costs\n- transcripts / recordings\n- ended-reasons ",
+        "height": 220,
+        "width": 220,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        540,
+        1340
+      ],
+      "typeVersion": 1,
+      "id": "7d59b47d-5e39-4ba6-a74c-1000e299f4c1",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Requirements\n\nCal.com account + event creation + API Key\n\nAirtable Access Token\n\nTwilio Account SID + Auth Token\n\nSlack* (optional)",
+        "height": 220,
+        "width": 380,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -860,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "eeffa666-fa43-4cec-8c2b-1afe04b169f2",
+      "name": "Sticky Note8"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tool-Calendar-Webhook": {
+      "main": [
+        [
+          {
+            "node": "Event = tool-call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook3": {
+      "main": [
+        [
+          {
+            "node": "Booking Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Time + Attempt": {
+      "main": [
+        [
+          {
+            "node": "AvailSlots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Time + Attempt 1": {
+      "main": [
+        [
+          {
+            "node": "AvailSlots1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Time + Attempt 2": {
+      "main": [
+        [
+          {
+            "node": "AvailSlots2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AvailSlots": {
+      "main": [
+        [
+          {
+            "node": "Slice + Shuffle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AvailSlots1": {
+      "main": [
+        [
+          {
+            "node": "Slice + Shuffle1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AvailSlots2": {
+      "main": [
+        [
+          {
+            "node": "Slice + Shuffle2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slice + Shuffle": {
+      "main": [
+        [
+          {
+            "node": "Format + Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slice + Shuffle1": {
+      "main": [
+        [
+          {
+            "node": "Format + Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slice + Shuffle2": {
+      "main": [
+        [
+          {
+            "node": "Format + Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format + Filter": {
+      "main": [
+        [
+          {
+            "node": "If Time Busy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format + Filter1": {
+      "main": [
+        [
+          {
+            "node": "If Time Busy1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format + Filter2": {
+      "main": [
+        [
+          {
+            "node": "If Time Busy2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Time Busy": {
+      "main": [
+        [
+          {
+            "node": "+1 Day / Attempt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Time Busy1": {
+      "main": [
+        [
+          {
+            "node": "+1 Day / Attempt1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Time Busy2": {
+      "main": [
+        [
+          {
+            "node": "+1 Day / Attempt2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "+1 Day / Attempt": {
+      "main": [
+        [
+          {
+            "node": "Attempt Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "+1 Day / Attempt1": {
+      "main": [
+        [
+          {
+            "node": "Attempt Check1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "+1 Day / Attempt2": {
+      "main": [
+        [
+          {
+            "node": "Attempt Check2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attempt Check": {
+      "main": [
+        [
+          {
+            "node": "Start Time + Attempt 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attempt Check1": {
+      "main": [
+        [
+          {
+            "node": "Start Time + Attempt 2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attempt Check2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arguments": {
+      "main": [
+        [
+          {
+            "node": "BookSlot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BookSlot": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event = tool-call": {
+      "main": [
+        [
+          {
+            "node": "tool-call-name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Customer Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tool-call-name": {
+      "main": [
+        [
+          {
+            "node": "Start Time + Attempt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Arguments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Twilio": {
+      "main": [
+        []
+      ]
+    },
+    "Customer Number": {
+      "main": [
+        [
+          {
+            "node": "Raw Data Record ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Booking Record": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0e5986b7-b80f-4eaf-b4d2-2e6197cc1f7c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f9574938e54b8931615bbe94739c7db1984fd1cf960fa71abede44e67747ff26"
+  },
+  "id": "8CuvxHBYl8AGpgLm",
+  "tags": []
+}
